@@ -11,4 +11,9 @@ class CategoryModel extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function event()
+    {
+        return $this->hasMany(EventModel::class, 'category_id');
+    }
 }

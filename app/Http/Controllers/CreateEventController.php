@@ -68,18 +68,7 @@ class CreateEventController extends Controller
      */
     public function show(string $id)
     {
-        $event_info = EventModel::find($id);
-        $category = CategoryModel::find($event_info['category_id']);
-        $attendee = AttendeeModel::where('event_id', $event_info['id'])->count();
-        $data = [
-            'id' => $event_info['id'],
-            'title' => $event_info['title'],
-            'description' => $event_info['description'],
-            'date' => $event_info['date'],
-            'location' => $event_info['location'],
-            'category' => $category->name,
-            'attendee' => $attendee,
-        ];
+        $data = EventModel::with(['category', 'attendees'])->findOrFail($id);
         return view('pages.events.show', compact('data'));
     }
 
@@ -89,6 +78,8 @@ class CreateEventController extends Controller
     public function edit(string $id)
     {
         //
+        $event_data = EventModel::find($id);
+        return view('pages.events.edit', compact('event_data'));
     }
 
     /**
@@ -105,5 +96,9 @@ class CreateEventController extends Controller
     public function destroy(string $id)
     {
         //
+        $event = EventModel::find($id);
+
+        $event->delete();
+        return redirect()->back()->with('success', 'Event deleted successfully.');
     }
 }

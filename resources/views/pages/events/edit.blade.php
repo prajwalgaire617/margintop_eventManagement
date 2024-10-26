@@ -36,9 +36,7 @@
 
                         <div class="button-container">
                             <button class="btn btn-primary" onclick="showForm('form1')">Category</button>
-                            <button
-                                class="{{ $event_categories != null ? 'btn btn-primary btn-sm' : 'btn btn-primary btn-sm disabled' }}"
-                                onclick="showForm('form3')">Event</button>
+                            <button class="{{ 'btn btn-primary btn-sm' }}" onclick="showForm('form3')">Event</button>
                         </div>
 
                         <div id="form3" class="form-container">
@@ -47,29 +45,29 @@
                                 @method('POST')
                                 <div class="form-group">
                                     <label class="form-label">Event title</label>
-                                    <input type="text" class="form-control" name="event_title" required>
+                                    <input type="text" class="form-control" name="event_title"
+                                        value="{{ $event_data['title'] }}" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Description</label>
                                     <textarea name="event_description" class="form-control" placeholder="Describe about the events" id="floatingTextarea"
-                                        cols="30" rows="10"></textarea>
+                                        cols="30" rows="10">{{ $event_data['description'] }}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Date</label>
-                                    <input type="date" class="form-control" name="event_date" required>
+                                    <input type="date" class="form-control" value="{{ $event_data['date'] }}"
+                                        name="event_date" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Location</label>
-                                    <input type="text" class="form-control" name="event_location" required>
+                                    <input type="text" class="form-control" value="{{ $event_data['location'] }}"
+                                        name="event_location" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Category</label>
 
                                     <select class="form-control" name="event_category" required>
                                         <option value="">Select Category</option>
-                                        @foreach ($event_categories as $values)
-                                            <option value="{{ $values['id'] }}">{{ $values['name'] }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-success w-100">Post</button>

@@ -10,4 +10,14 @@ class EventModel extends Model
     use HasFactory;
 
     protected $fillable = ['title', 'description', 'date', 'location', 'category_id'];
+
+    public function category()
+    {
+        return $this->belongsTo(CategoryModel::class, 'category_id');
+    }
+
+    public function attendees()
+    {
+        return $this->hasOne(AttendeeModel::class, 'event_id');
+    }
 }

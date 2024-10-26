@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendeeModel;
+use App\Rules\UniqueRegistration;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Auth;
 
 class AttendeeController extends Controller
@@ -29,26 +31,23 @@ class AttendeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
-        $validate = $request->validate([
-            'email' => 'required',  // Specify table and column name
-            'event_category' => 'required',  // Specify table and column name
+        // Validate input data
+        $request->validate([
+            'email' => 'required|email',
+            'event_id' => ['required', 'exists:attendee_models,event_id', new UniqueRegistration($request->event_id)],
         ]);
 
         try {
+            // Create new attendee record
             AttendeeModel::create([
                 'name' => Auth::user()->name,
-                'email' => $validate['email'],
-                'event_id' => $validate['event_category'],
+                'email' => Auth::user()->email,
+                'event_id' => $request->event_id,
             ]);
 
-            return redirect()->route('events.index')->with('success', 'successfully registered!');
+            return redirect()->route('home.index')->with('success', 'Successfully registered!');
         } catch (\Throwable $th) {
-            return redirect()->back()->withErrors([
-                'name' => 'name cannot be empty',
-                'email' => 'email field cannot be empty',
-            ]);
+            return redirect()->back()->withErrors(['error' => $th->getMessage()]);
         }
     }
 

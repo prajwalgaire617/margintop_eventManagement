@@ -16,28 +16,28 @@
                             <img src="https://img.freepik.com/free-vector/culture-logo-design-template_23-2149884164.jpg?t=st=1729883002~exp=1729886602~hmac=b83a1a653926499d62050dd363d8b781f8648eb2180f09acfabe4f540957bdbf&w=740"
                                 alt="Event Icon" class="rounded-circle mr-3" style="width: 60px; height: 60px;">
                             <div>
-                                <h2 class="card-title text-primary">{{ $data['title'] }}</h2>
-                                <p class="card-text text-muted">{{ $data['description'] }}</p>
+                                <h2 class="card-title text-primary">{{ $data->title }}</h2>
+                                <p class="card-text text-muted">{{ $data->description }}</p>
                             </div>
                         </div>
 
                         <!-- Event Details -->
                         <div class="mb-4">
                             <strong class="d-block mb-2"><i class="fas fa-calendar-alt text-info"></i>
-                                Date:</strong>{{ $data['date'] }}
+                                Date:</strong>
+                            {{ \Carbon\Carbon::parse($data->date)->format('M d, Y') }}</li>
                             <strong class="d-block mb-2"><i class="fas fa-map-marker-alt text-danger"></i>
-                                Location:</strong> {{ $data['location'] }}
-                            <strong class="d-block mb-2"><i
-                                    class="fas fa-tags text-warning"></i>{{ $data['category'] }}</strong>
-                            Conference
+                                Location:</strong> {{ $data->location }}
+                            <strong class="d-block mb-2"><i class="fas fa-tags text-warning"></i>Event type</strong>
+                            {{ $data->category->name }}
                             <strong class="d-block mb-2"><i class="fas fa-users text-success"></i> Attendees:</strong>
-                            {{ $data['attendee'] }}
+                            {{ $data->attendees->count() }}
                         </div>
 
                         <!-- Call to Action Buttons -->
                         <div class="d-flex justify-content-between">
                             @if (Auth::user()->isAdmin)
-                                <a href="#" class="btn btn-primary">
+                                <a href="{{ route('events.edit', $data->id) }}" class="btn btn-primary">
                                     <i class="fas fa-edit"></i> Edit Event
                                 </a>
                             @endif

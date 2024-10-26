@@ -6,6 +6,7 @@ use App\Models\AttendeeModel;
 use App\Models\CategoryModel;
 use App\Models\EventModel;
 use Illuminate\Http\Request;
+use Event;
 
 class WelcomeScreenController extends Controller
 {
@@ -14,23 +15,7 @@ class WelcomeScreenController extends Controller
      */
     public function index()
     {
-        //
-        $allEvents = EventModel::all();
-        $eventData = [];
-        foreach ($allEvents as $key => $value) {
-            $category_name = CategoryModel::find($value['category_id'])->name;
-            $attendee = AttendeeModel::where('event_id', $value['id'])->count();
-            $data = [
-                'id' => $value['id'],
-                'title' => $value['title'],
-                'description' => $value['description'],
-                'date' => $value['date'],
-                'location' => $value['location'],
-                'category' => $category_name,
-                'attendee' => $attendee,
-            ];
-            array_push($eventData, $data);
-        }
+        $eventData = EventModel::with(['category', 'attendees'])->get();
         return view('pages.welcome.index', compact('eventData'));
     }
 
