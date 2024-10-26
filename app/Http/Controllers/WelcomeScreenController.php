@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendeeModel;
+use App\Models\CategoryModel;
+use App\Models\EventModel;
 use Illuminate\Http\Request;
-use Auth;
 
-class AttendeeController extends Controller
+class WelcomeScreenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,6 +15,23 @@ class AttendeeController extends Controller
     public function index()
     {
         //
+        $allEvents = EventModel::all();
+        $eventData = [];
+        foreach ($allEvents as $key => $value) {
+            $category_name = CategoryModel::find($value['category_id'])->name;
+            $attendee = AttendeeModel::where('event_id', $value['id'])->count();
+            $data = [
+                'id' => $value['id'],
+                'title' => $value['title'],
+                'description' => $value['description'],
+                'date' => $value['date'],
+                'location' => $value['location'],
+                'category' => $category_name,
+                'attendee' => $attendee,
+            ];
+            array_push($eventData, $data);
+        }
+        return view('pages.welcome.index', compact('eventData'));
     }
 
     /**
@@ -30,26 +48,6 @@ class AttendeeController extends Controller
     public function store(Request $request)
     {
         //
-
-        $validate = $request->validate([
-            'email' => 'required',  // Specify table and column name
-            'event_category' => 'required',  // Specify table and column name
-        ]);
-
-        try {
-            AttendeeModel::create([
-                'name' => Auth::user()->name,
-                'email' => $validate['email'],
-                'event_id' => $validate['event_category'],
-            ]);
-
-            return redirect()->route('events.index')->with('success', 'successfully registered!');
-        } catch (\Throwable $th) {
-            return redirect()->back()->withErrors([
-                'name' => 'name cannot be empty',
-                'email' => 'email field cannot be empty',
-            ]);
-        }
     }
 
     /**

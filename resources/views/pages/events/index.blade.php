@@ -36,8 +36,7 @@
 
                         <div class="button-container">
                             <button class="btn btn-primary" onclick="showForm('form1')">Category</button>
-                            <button
-                                class="{{ $event != null ? 'btn btn-primary btn-sm' : 'btn btn-primary btn-sm disabled' }}"
+                            <button class="{{ $event != null ? 'btn btn-primary ' : 'btn btn-primary btn-sm disabled' }}"
                                 onclick="showForm('form2')">Attendee</button>
                             <button
                                 class="{{ $event_categories != null ? 'btn btn-primary btn-sm' : 'btn btn-primary btn-sm disabled' }}"
@@ -80,8 +79,9 @@
                         </div>
 
                         <div id="form2" class="form-container">
-                            <form action="" method="POST">
+                            <form action="{{ route('attendee.store') }}" method="POST">
                                 @csrf
+                                @method('POST')
                                 <div class="form-group">
                                     <label class="form-label">Email Address</label>
                                     <input type="email" class="form-control" name="email" required>

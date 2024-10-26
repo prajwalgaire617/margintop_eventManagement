@@ -62,6 +62,22 @@
 
 @section('body')
     <div class="container my-5">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Display Error Messages -->
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <!-- Page Title -->
         <div class="text-center mb-5">
             <h1 class="display-4">Upcoming Events</h1>
@@ -71,27 +87,28 @@
 
         <!-- Event Cards Section -->
         <div class="row g-4">
-            @foreach ($events as $event)
+            @foreach ($eventData as $event)
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
                         <!-- Card Header with Event Title -->
                         <div class="card-body">
-                            <h5 class="card-title text-primary">{{ $event->title }}</h5>
-                            <p class="card-text text-muted">{{ Str::limit($event->description, 100) }}</p>
+                            <h5 class="card-title text-primary">{{ $event['title'] }}</h5>
+                            <p class="card-text text-muted">{{ Str::limit($event['description'], 100) }}</p>
                         </div>
 
                         <!-- Card Footer with Details -->
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Date:</strong>
-                                {{ \Carbon\Carbon::parse($event->event_date)->format('M d, Y') }}</li>
-                            <li class="list-group-item"><strong>Location:</strong> {{ $event->location }}</li>
-                            <li class="list-group-item"><strong>Category:</strong> {{ $event->category->name }}</li>
-                            <li class="list-group-item"><strong>Attendees:</strong> {{ $event->attendees->count() }}</li>
+                                {{ \Carbon\Carbon::parse($event['date'])->format('M d, Y') }}</li>
+                            <li class="list-group-item"><strong>Location:</strong> {{ $event['location'] }}</li>
+                            <li class="list-group-item"><strong>Category:</strong> {{ $event['category'] }}</li>
+                            <li class="list-group-item"><strong>Attendees:</strong> {{ 3 }}</li>
                         </ul>
 
                         <!-- View Details Button -->
                         <div class="card-footer text-center">
-                            <a href="#" class="btn btn-outline-info btn-sm">View Details</a>
+                            <a href="{{ route('events.show', $event['id']) }}" class="btn btn-outline-info btn-sm">View
+                                Details</a>
                         </div>
                     </div>
                 </div>

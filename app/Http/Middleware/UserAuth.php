@@ -17,14 +17,16 @@ class UserAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check() && !$request->is('login')) {
-            return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
+            return redirect()->route('login');
         }
         if (Auth::check()) {
             if ($request->is('login')) {
                 return redirect()->intended('/');
             }
+            if (!Auth::user()->isAdmin && $request->is('events')) {
+                return redirect()->intended('/')->with('error', 'You must be admin to access this page.');
+            }
         }
-
         return $next($request);
     }
 }

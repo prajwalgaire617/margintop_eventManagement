@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendeeModel;
 use App\Models\CategoryModel;
 use App\Models\EventModel;
 use Illuminate\Http\Request;
+use Auth;
 
 class CreateEventController extends Controller
 {
@@ -66,7 +68,19 @@ class CreateEventController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $event_info = EventModel::find($id);
+        $category = CategoryModel::find($event_info['category_id']);
+        $attendee = AttendeeModel::where('event_id', $event_info['id'])->count();
+        $data = [
+            'id' => $event_info['id'],
+            'title' => $event_info['title'],
+            'description' => $event_info['description'],
+            'date' => $event_info['date'],
+            'location' => $event_info['location'],
+            'category' => $category->name,
+            'attendee' => $attendee,
+        ];
+        return view('pages.events.show', compact('data'));
     }
 
     /**
