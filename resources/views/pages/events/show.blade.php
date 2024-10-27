@@ -31,7 +31,7 @@
                             <strong class="d-block mb-2"><i class="fas fa-tags text-warning"></i>Event type</strong>
                             {{ $data->category->name }}
                             <strong class="d-block mb-2"><i class="fas fa-users text-success"></i> Attendees:</strong>
-                            {{ $data->attendees->count() }}
+                            {{ is_null($data->attendees) ? 'N/A' : $data->attendees->count() }}
                         </div>
 
                         <!-- Call to Action Buttons -->

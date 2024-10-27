@@ -40,34 +40,39 @@
                         </div>
 
                         <div id="form3" class="form-container">
-                            <form action="{{ route('events.store') }}" method="POST">
+                            <form action="{{ route('events.update', $event_data->id) }}" method="POST">
                                 @csrf
-                                @method('POST')
+                                @method('PUT')
                                 <div class="form-group">
                                     <label class="form-label">Event title</label>
                                     <input type="text" class="form-control" name="event_title"
-                                        value="{{ $event_data['title'] }}" required>
+                                        value="{{ $event_data->title }}" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Description</label>
                                     <textarea name="event_description" class="form-control" placeholder="Describe about the events" id="floatingTextarea"
-                                        cols="30" rows="10">{{ $event_data['description'] }}</textarea>
+                                        cols="30" rows="10">{{ $event_data->description }}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Date</label>
-                                    <input type="date" class="form-control" value="{{ $event_data['date'] }}"
+                                    <input type="date" class="form-control" value="{{ $event_data->date }}"
                                         name="event_date" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Location</label>
-                                    <input type="text" class="form-control" value="{{ $event_data['location'] }}"
+                                    <input type="text" class="form-control" value="{{ $event_data->location }}"
                                         name="event_location" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Category</label>
 
                                     <select class="form-control" name="event_category" required>
-                                        <option value="">Select Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ $category->id == $event_data->category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-success w-100">Post</button>
@@ -75,12 +80,13 @@
                         </div>
 
                         <div id="form1" class="form-container">
-                            <form action="{{ route('category.store') }}" method="POST">
+                            <form action="{{ route('category.update', $event_data->category_id) }}" method="POST">
                                 @csrf
-                                @method('POST')
+                                @method('PUT')
                                 <div class="form-group">
                                     <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="newsletter" name="category_name">
+                                    <input type="text" class="form-control" id="newsletter" name="category_name"
+                                        value="{{ $event_data->category->name }}">
                                 </div>
                                 <button type="submit" class="btn btn-success w-100">Submit Additional Info</button>
                             </form>

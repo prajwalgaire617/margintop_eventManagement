@@ -96,9 +96,9 @@
         <!--erro message section ends-->
         <!-- Page Title -->
         <div class="text-center mb-5">
-            <h1 class="display-4">Upcoming Events</h1>
-            <p class="lead text-muted">Browse through all upcoming events and manage them as an admin.</p>
-            <a href="{{ route('logout') }}" class="btn btn-primary btn-lg">Admin Logout</a>
+
+            <h1 class="display-4">Hello {{ Auth::check() ? Auth::user()->name : 'Guest' }}!!</h1>
+            <p class="lead text-muted">Browse through all upcoming events</p>
         </div>
 
         <!-- Event Cards Section -->
@@ -140,12 +140,13 @@
                                 {{ \Carbon\Carbon::parse($event->date)->format('M d, Y') }}</li>
                             <li class="list-group-item"><strong>Location:</strong> {{ $event->location }}</li>
                             <li class="list-group-item"><strong>Category:</strong> {{ $event->category->name }}</li>
-                            <li class="list-group-item"><strong>Attendees:</strong> {{ $event->attendees->count() }}</li>
+                            <li class="list-group-item"><strong>Attendees:</strong>
+                                {{ is_null($event->attendees) ? 'N/A' : $event->attendees->count() }}</li>
                         </ul>
 
                         <!-- View Details Button -->
                         <div class="card-footer text-center">
-                            <a href="{{ route('events.show', $event['id']) }}" class="btn btn-outline-info btn-sm">View
+                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-outline-info btn-sm">View
                                 Details</a>
                         </div>
                     </div>

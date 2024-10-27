@@ -16,6 +16,7 @@ class WelcomeScreenController extends Controller
     public function index()
     {
         $eventData = EventModel::with(['category', 'attendees'])->get();
+
         return view('pages.welcome.index', compact('eventData'));
     }
 

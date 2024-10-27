@@ -66,6 +66,16 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         //
+
+        $category_name = CategoryModel::find($id);
+        $request->validate([
+            'category_name' => 'required|unique:category_models,name',  // Specify table and column name
+        ]);
+
+        $category_name->name = $request->input('category_name');
+        $category_name->save();
+
+        return redirect()->route('home.index')->with('success', 'category updated successfully!');
     }
 
     /**

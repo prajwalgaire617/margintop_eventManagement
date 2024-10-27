@@ -20,9 +20,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Attendees</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-outline-primary ms-2" href="{{ route('login') }}">Admin Login</a>
-                </li>
+                @if (Auth::check())
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary ms-2" href="{{ route('logout') }}">logout</a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-primary ms-2" href="{{ route('login') }}">Login</a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

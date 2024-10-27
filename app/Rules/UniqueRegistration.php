@@ -3,34 +3,27 @@
 namespace App\Rules;
 
 use App\Models\AttendeeModel;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Auth;
-use Closure;
+use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
-class UniqueRegistration implements ValidationRule
+class UniqueRegistration implements Rule
 {
-    private $event_id;
+    private $eventId;
 
-    /**
-     * Run the validation rule.
-     *
-     * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
-     */
-    public function __construct($event_id)
+    public function __construct($eventId)
     {
-        $this->event_id = $event_id;
+        $this->eventId = $eventId;
     }
 
-    public function validate(string $attribute, mixed $value, Closure $fail): void
+    public function passes($attribute, $value)
     {
-        //
-        $exists = AttendeeModel::where('email', Auth::user()->email)
-            ->where('event_id', $this->event_id)
+        return !AttendeeModel::where('email', Auth::user()->email)
+            ->where('event_id', $this->eventId)
             ->exists();
+    }
 
-        if ($exists) {
-            // If exists, call the $fail closure with an error message
-            $fail('You have already registered for this event.');  // Custom error message
-        }
+    public function message()
+    {
+        return 'You have already registered for this event.';
     }
 }

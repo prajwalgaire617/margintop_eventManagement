@@ -18,6 +18,6 @@ class EventModel extends Model
 
     public function attendees()
     {
-        return $this->hasOne(AttendeeModel::class, 'event_id');
+        return $this->hasMany(AttendeeModel::class, 'event_id');
     }
 }

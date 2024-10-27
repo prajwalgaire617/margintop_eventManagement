@@ -32,9 +32,12 @@ class AttendeeController extends Controller
     public function store(Request $request)
     {
         // Validate input data
-        $request->validate([
-            'email' => 'required|email',
-            'event_id' => ['required', 'exists:attendee_models,event_id', new UniqueRegistration($request->event_id)],
+        $validated = $request->validate([
+            'event_id' => [
+                'required',
+                'exists:event_models,id',
+                new UniqueRegistration($request->event_id)
+            ],
         ]);
 
         try {

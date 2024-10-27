@@ -78,16 +78,37 @@ class CreateEventController extends Controller
     public function edit(string $id)
     {
         //
-        $event_data = EventModel::find($id);
-        return view('pages.events.edit', compact('event_data'));
+
+        $event_data = EventModel::with(['category', 'attendees'])->findOrFail($id);
+        $categories = CategoryModel::all();
+
+        return view('pages.events.edit', compact('event_data', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    /** Update the specified resource in storage. */
+    //
+
+    public function update(Request $request, $id)
     {
-        //
+        $event = EventModel::findOrFail($id);
+
+        $request->validate([
+            'event_title' => 'required|string|max:255',
+            'event_description' => 'nullable|string',
+            'event_date' => 'required|date',
+            'event_location' => 'required|string|max:255',
+            'event_category' => 'required|exists:category_models,id',  // Assuming categories table exists
+        ]);
+
+        $event->title = $request->input('event_title');
+        $event->description = $request->input('event_description');
+        $event->date = $request->input('event_date');
+        $event->location = $request->input('event_location');
+        $event->category_id = $request->input('event_category');
+
+        $event->save();
+
+        return redirect()->route('events.index')->with('success', 'Event updated successfully!');
     }
 
     /**
